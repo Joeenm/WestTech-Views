@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WestTech Social - Catálogo de Actividades</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+  <!-- Header -->
+  <header class="bg-blue-900 text-white py-4 px-6 flex justify-between items-center shadow-md">
+    <h1 class="text-xl font-semibold">WestTech Social</h1>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="max-w-7xl mx-auto py-10 px-6">
+    <h2 class="text-2xl font-semibold text-blue-900 mb-6 text-center">Catálogo de Actividades Disponibles</h2>
+
+    <!-- Grid de Cards -->
+    <div id="catalogo" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Ejemplo de actividad -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition card" data-cupos="5">
+        <img src="https://picsum.photos/400/200" alt="Actividad 1" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-blue-900">Apoyo a la Feria Científica UTP</h3>
+          <p class="text-sm text-gray-600 mt-2">📅 15 Oct 2025 • ⏰ 8:00 a.m. • ⏱️ 40 horas</p>
+          <p class="mt-2 text-sm font-medium text-green-700 cupos">Cupos disponibles: <span class="font-bold">5</span></p>
+          <button onclick="abrirModal(this)" class="mt-4 bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition w-full">Ver detalles</button>
+        </div>
+      </div>
+
+      <!-- Segunda actividad -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition card" data-cupos="2">
+        <img src="https://picsum.photos/400/201" alt="Actividad 2" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-blue-900">Limpieza de Playa Veracruz</h3>
+          <p class="text-sm text-gray-600 mt-2">📅 22 Oct 2025 • ⏰ 7:30 a.m. • ⏱️ 30 horas</p>
+          <p class="mt-2 text-sm font-medium text-green-700 cupos">Cupos disponibles: <span class="font-bold">2</span></p>
+          <button onclick="abrirModal(this)" class="mt-4 bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition w-full">Ver detalles</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div id="modalActividad" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+    <div class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-3xl relative overflow-y-auto max-h-[90vh]">
+      <button onclick="cerrarModal()" class="absolute top-3 right-4 text-gray-600 hover:text-red-500 text-2xl font-bold">&times;</button>
+      <h2 class="text-2xl font-semibold text-blue-900 mb-3">Detalles de la Actividad</h2>
+
+      <div class="text-sm space-y-2 mb-4">
+        <p><strong>Ubicación:</strong> Campus UTP Panamá Oeste</p>
+        <p><strong>Disponibilidad de vehículo:</strong> No requerido</p>
+        <p><strong>Fecha y hora:</strong> 15 Oct 2025 – 8:00 a.m.</p>
+        <p><strong>Horas otorgadas:</strong> 40</p>
+        <p><strong>Impacto:</strong> Apoyo en la organización de eventos científicos</p>
+        <p><strong>Contribución al desarrollo sostenible:</strong> Educación de calidad (ODS 4)</p>
+        <p><strong>Perfil del estudiante:</strong> Estudiantes de Sistemas o Industrial</p>
+        <p><strong>Cupos disponibles:</strong> <span id="cuposModal" class="font-bold text-green-700">0</span></p>
+        <p><strong>Encargado:</strong> Lic. María González</p>
+        <p class="text-red-600"><strong>Anuncio importante:</strong> Llevar carnet institucional y laptop.</p>
+      </div>
+
+      <div class="text-center">
+        <button onclick="mostrarFormulario()" id="btnRegistrar" class="bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">Registrarme</button>
+      </div>
+
+      <!-- Formulario -->
+      <div id="formularioRegistro" class="hidden mt-6 border-t border-gray-300 pt-4">
+        <h3 class="text-lg font-semibold text-blue-900 mb-3">Formulario de Registro</h3>
+        <form onsubmit="registrarEstudiante(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" placeholder="Primer nombre" required class="p-2 border rounded-md">
+          <input type="text" placeholder="Segundo nombre" class="p-2 border rounded-md">
+          <input type="text" placeholder="Primer apellido" required class="p-2 border rounded-md">
+          <input type="text" placeholder="Segundo apellido" class="p-2 border rounded-md">
+          <input type="text" placeholder="Cédula" required class="p-2 border rounded-md">
+          <input type="email" placeholder="Correo institucional" required class="p-2 border rounded-md">
+          <input type="text" placeholder="Tipo de sangre" class="p-2 border rounded-md">
+          
+          <select required class="p-2 border rounded-md">
+            <option value="">Facultad perteneciente</option>
+            <option>Ingeniería Civil</option>
+            <option>Ingeniería Eléctrica</option>
+            <option>Ingeniería Industrial</option>
+            <option>Ingeniería Mecánica</option>
+            <option>Ingeniería de Sistemas Computacionales</option>
+            <option>Ciencias y Tecnología</option>
+          </select>
+
+          <input type="number" placeholder="Año que cursa" min="1" max="5" class="p-2 border rounded-md">
+          <input type="file" accept="image/*" class="p-2 border rounded-md col-span-1 md:col-span-2">
+
+          <button type="submit" class="bg-blue-700 text-white py-2 rounded-md hover:bg-blue-800 transition col-span-1 md:col-span-2">
+            Enviar solicitud
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    const modal = document.getElementById('modalActividad');
+    const form = document.getElementById('formularioRegistro');
+    const cuposModal = document.getElementById('cuposModal');
+    let actividadActual = null;
+
+    function abrirModal(button) {
+      const card = button.closest('.card');
+      actividadActual = card;
+      const cupos = parseInt(card.getAttribute('data-cupos'));
+      cuposModal.textContent = cupos;
+      form.classList.add('hidden');
+      modal.classList.remove('hidden');
+      document.getElementById('btnRegistrar').disabled = (cupos <= 0);
+      document.getElementById('btnRegistrar').classList.toggle('opacity-50', cupos <= 0);
+    }
+
+    function cerrarModal() {
+      modal.classList.add('hidden');
+    }
+
+    function mostrarFormulario() {
+      form.classList.remove('hidden');
+      form.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function registrarEstudiante(e) {
+      e.preventDefault();
+      const cupos = parseInt(actividadActual.getAttribute('data-cupos'));
+      if (cupos > 0) {
+        const nuevosCupos = cupos - 1;
+        actividadActual.setAttribute('data-cupos', nuevosCupos);
+        actividadActual.querySelector('.cupos span').textContent = nuevosCupos;
+        cuposModal.textContent = nuevosCupos;
+
+        if (nuevosCupos <= 0) {
+          actividadActual.querySelector('.cupos').textContent = "Cupos agotados";
+          actividadActual.classList.add('opacity-50');
+          actividadActual.querySelector('button').disabled = true;
+          actividadActual.querySelector('button').classList.add('opacity-50');
+          setTimeout(() => actividadActual.remove(), 1500);
+        }
+
+        alert("Registro exitoso ✅");
+        cerrarModal();
+      }
+    }
+
+    // Cerrar modal al hacer clic fuera
+    window.onclick = (e) => {
+      if (e.target === modal) cerrarModal();
+    };
+  </script>
+</body>
+</html>

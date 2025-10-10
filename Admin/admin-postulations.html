@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Postulaciones - WestTech Social</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex bg-gray-100 min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-blue-800 text-white flex flex-col">
+    <div class="p-6 text-2xl font-bold border-b border-blue-700">WestTech Social</div>
+    <nav class="flex-1 p-4 space-y-2">
+      <a href="admin-dashboard.html" class="block py-2 px-3 rounded-lg hover:bg-blue-700">📊 Dashboard</a>
+      <a href="admin-activities.html" class="block py-2 px-3 rounded-lg hover:bg-blue-700">🗓️ Gestión de Actividades</a>
+      <a href="admin-postulations.html" class="block py-2 px-3 rounded-lg bg-blue-700">👥 Postulaciones</a>
+    </nav>
+    <div class="p-4 border-t border-blue-700">
+      <button class="w-full bg-red-600 hover:bg-red-700 py-2 rounded-lg">Cerrar Sesión</button>
+    </div>
+  </aside>
+
+  <!-- Contenido principal -->
+  <main class="flex-1 p-8">
+    <h1 class="text-3xl font-semibold text-blue-800 mb-6">Gestión de Postulaciones</h1>
+
+    <!-- Filtro por actividad -->
+    <div class="bg-white p-6 rounded-xl shadow mb-8">
+      <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div class="flex items-center gap-3">
+          <label for="actividad" class="font-medium text-gray-700">Filtrar por Actividad:</label>
+          <select id="actividad" class="p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
+            <option value="">Todas</option>
+            <option value="Apoyo Feria Científica">Apoyo Feria Científica</option>
+            <option value="Limpieza de Playa">Limpieza de Playa</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de postulaciones -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Listado de Postulaciones</h2>
+
+      <div class="overflow-x-auto">
+        <table id="tabla-postulaciones" class="min-w-full border border-gray-200">
+          <thead class="bg-blue-800 text-white">
+            <tr>
+              <th class="py-2 px-3 text-left">Estudiante</th>
+              <th class="py-2 px-3 text-left">Cédula</th>
+              <th class="py-2 px-3 text-left">Correo</th>
+              <th class="py-2 px-3 text-left">Facultad</th>
+              <th class="py-2 px-3 text-left">Año</th>
+              <th class="py-2 px-3 text-left">Tipo de Sangre</th>
+              <th class="py-2 px-3 text-left">Documento</th>
+              <th class="py-2 px-3 text-left">Actividad</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+
+            <tr class="hover:bg-gray-50">
+              <td class="py-2 px-3">María González</td>
+              <td class="py-2 px-3">8-912-345</td>
+              <td class="py-2 px-3">maria.gonzalez@utp.ac.pa</td>
+              <td class="py-2 px-3">Ingeniería Industrial</td>
+              <td class="py-2 px-3">3</td>
+              <td class="py-2 px-3">O+</td>
+              <td class="py-2 px-3"><a href="#" class="text-blue-600 hover:underline">Ver documento</a></td>
+              <td class="py-2 px-3">Apoyo Feria Científica</td>
+            </tr>
+
+            <tr class="hover:bg-gray-50">
+              <td class="py-2 px-3">Luis Torres</td>
+              <td class="py-2 px-3">8-765-987</td>
+              <td class="py-2 px-3">luis.torres@utp.ac.pa</td>
+              <td class="py-2 px-3">Ciencias y Tecnología</td>
+              <td class="py-2 px-3">2</td>
+              <td class="py-2 px-3">A-</td>
+              <td class="py-2 px-3"><a href="#" class="text-blue-600 hover:underline">Ver documento</a></td>
+              <td class="py-2 px-3">Limpieza de Playa</td>
+            </tr>
+
+            <tr class="hover:bg-gray-50">
+              <td class="py-2 px-3">Ana Pérez</td>
+              <td class="py-2 px-3">8-541-654</td>
+              <td class="py-2 px-3">ana.perez@utp.ac.pa</td>
+              <td class="py-2 px-3">Ingeniería de Sistemas Computacionales</td>
+              <td class="py-2 px-3">1</td>
+              <td class="py-2 px-3">B+</td>
+              <td class="py-2 px-3"><a href="#" class="text-blue-600 hover:underline">Ver documento</a></td>
+              <td class="py-2 px-3">Apoyo Feria Científica</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Script para filtro funcional -->
+  <script>
+    const selectActividad = document.getElementById('actividad');
+    const tabla = document.getElementById('tabla-postulaciones').getElementsByTagName('tbody')[0];
+
+    selectActividad.addEventListener('change', () => {
+      const filtro = selectActividad.value.toLowerCase();
+      const filas = tabla.getElementsByTagName('tr');
+
+      for (let i = 0; i < filas.length; i++) {
+        const actividad = filas[i].getElementsByTagName('td')[7].textContent.toLowerCase();
+        if (!filtro || actividad === filtro) {
+          filas[i].style.display = '';
+        } else {
+          filas[i].style.display = 'none';
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
