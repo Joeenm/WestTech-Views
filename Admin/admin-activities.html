@@ -13,7 +13,7 @@
     <div class="p-6 text-2xl font-bold border-b border-blue-700">WestTech Social</div>
     <nav class="flex-1 p-4 space-y-2">
       <a href="admin-dashboard.html" class="block py-2 px-3 rounded-lg hover:bg-blue-700">📊 Dashboard</a>
-      <a href="admin-activitieds.html" class="block py-2 px-3 rounded-lg bg-blue-700">🗓️ Gestión de Actividades</a>
+      <a href="admin-activities.html" class="block py-2 px-3 rounded-lg bg-blue-700">🗓️ Gestión de Actividades</a>
       <a href="admin-postulations.html" class="block py-2 px-3 rounded-lg hover:bg-blue-700">👥 Postulaciones</a>
     </nav>
     <div class="p-4 border-t border-blue-700">
@@ -26,81 +26,12 @@
 
     <h1 class="text-3xl font-semibold text-blue-800 mb-6">Gestión de Actividades</h1>
 
-    <!-- Formulario de creación -->
-    <div class="bg-white rounded-xl shadow-lg p-6 mb-10">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Nueva Actividad</h2>
-
-      <form id="formActividad" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre de la Actividad</label>
-          <input type="text" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Encargado</label>
-          <input type="text" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-        </div>
-
-        <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-          <textarea rows="3" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"></textarea>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
-          <input type="text" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Disponibilidad de vehículo</label>
-          <select class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-            <option value="Sí">Sí</option>
-            <option value="No">No</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Fecha y Hora</label>
-          <input type="datetime-local" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Horas Otorgadas</label>
-          <input type="number" min="1" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Cupos Disponibles</label>
-          <input type="number" min="1" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Impacto</label>
-          <input type="text" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Contribución al Desarrollo Sostenible</label>
-          <input type="text" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-        </div>
-
-        <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Perfil del Estudiante</label>
-          <textarea rows="2" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"></textarea>
-        </div>
-
-        <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Anuncio Importante (opcional)</label>
-          <textarea rows="2" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"></textarea>
-        </div>
-
-        <div class="md:col-span-2 text-right">
-          <button type="submit" class="bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">
-            Publicar Actividad
-          </button>
-        </div>
-      </form>
+    <!-- Botón Nueva Actividad -->
+    <div class="flex justify-between items-center mb-4">
+      <button id="btnNueva" class="bg-blue-700 text-white px-5 py-2 rounded-lg hover:bg-blue-800 transition">
+        ➕ Nueva Actividad
+      </button>
+      <input type="text" id="filtro" placeholder="🔍 Buscar actividad..." class="p-2 border rounded-lg w-64 focus:ring-2 focus:ring-blue-400" />
     </div>
 
     <!-- Tabla de actividades -->
@@ -108,7 +39,7 @@
       <h2 class="text-2xl font-semibold text-gray-800 mb-4">Actividades Publicadas</h2>
 
       <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-200">
+        <table id="tablaActividades" class="min-w-full border border-gray-200">
           <thead class="bg-blue-800 text-white">
             <tr>
               <th class="py-2 px-3 text-left">Nombre</th>
@@ -119,7 +50,7 @@
               <th class="py-2 px-3 text-center">Acciones</th>
             </tr>
           </thead>
-          <tbody class="divide-y">
+          <tbody class="divide-y" id="bodyTabla">
             <tr class="hover:bg-gray-50">
               <td class="py-2 px-3">Apoyo Feria Científica</td>
               <td class="py-2 px-3">Lic. García</td>
@@ -127,8 +58,8 @@
               <td class="py-2 px-3">10</td>
               <td class="py-2 px-3">5</td>
               <td class="py-2 px-3 text-center space-x-2">
-                <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Editar</button>
-                <button class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Eliminar</button>
+                <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 btnEditar">Editar</button>
+                <button class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 btnVer">Ver Detalles</button>
               </td>
             </tr>
             <tr class="hover:bg-gray-50">
@@ -138,15 +69,192 @@
               <td class="py-2 px-3">8</td>
               <td class="py-2 px-3">0</td>
               <td class="py-2 px-3 text-center space-x-2">
-                <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Editar</button>
-                <button class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Eliminar</button>
+                <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 btnEditar">Editar</button>
+                <button class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 btnVer">Ver Detalles</button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-
   </main>
+
+  <!-- MODAL CREAR / EDITAR ACTIVIDAD -->
+  <div id="modalActividad" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-3xl">
+      <h2 id="tituloModal" class="text-2xl font-semibold text-gray-800 mb-4">Nueva Actividad</h2>
+
+      <form id="formActividad" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre de la Actividad *</label>
+          <input id="nombre" type="text" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Encargado *</label>
+          <input id="encargado" type="text" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Descripción *</label>
+          <textarea id="descripcion" rows="3" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Ubicación *</label>
+          <input id="ubicacion" type="text" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Disponibilidad de vehículo</label>
+          <select id="vehiculo" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
+            <option>Sí</option>
+            <option>No</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Fecha y Hora *</label>
+          <input id="fecha" type="datetime-local" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Horas Otorgadas *</label>
+          <input id="horas" type="number" min="1" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Cupos Disponibles *</label>
+          <input id="cupos" type="number" min="1" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Impacto</label>
+          <input id="impacto" type="text" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Contribución al Desarrollo Sostenible</label>
+          <input id="contribucion" type="text" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Perfil del Estudiante</label>
+          <textarea id="perfil" rows="2" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"></textarea>
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Anuncio Importante</label>
+          <textarea id="anuncio" rows="2" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"></textarea>
+        </div>
+
+        <div class="md:col-span-2 flex justify-end gap-3">
+          <button type="button" id="btnCancelar" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Cancelar</button>
+          <button type="submit" id="btnGuardar" class="bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800">Registrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<!-- MODAL DETALLES -->
+<div id="modalDetalles" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-2xl overflow-y-auto max-h-[90vh]">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Detalles de la Actividad</h2>
+    <div id="contenidoDetalles" class="space-y-3 text-gray-700"></div>
+    <div class="text-right mt-6">
+      <button id="cerrarDetalles" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById("modalActividad");
+  const modalDetalles = document.getElementById("modalDetalles");
+  const form = document.getElementById("formActividad");
+  const tituloModal = document.getElementById("tituloModal");
+  const btnGuardar = document.getElementById("btnGuardar");
+  const filtro = document.getElementById("filtro");
+  const bodyTabla = document.getElementById("bodyTabla");
+
+  document.getElementById("btnNueva").onclick = () => {
+    modal.classList.remove("hidden");
+    tituloModal.textContent = "Nueva Actividad";
+    btnGuardar.textContent = "Registrar";
+    form.reset();
+  };
+
+  document.getElementById("btnCancelar").onclick = () => modal.classList.add("hidden");
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    const camposObligatorios = ["nombre", "encargado", "descripcion", "ubicacion", "fecha", "horas", "cupos"];
+    const incompletos = camposObligatorios.some(id => !document.getElementById(id).value.trim());
+    if (incompletos) {
+      alert("⚠️ Termine de completar los datos para registrar la actividad.");
+      return;
+    }
+    alert(btnGuardar.textContent === "Registrar"
+      ? "✅ Actividad registrada con éxito."
+      : "✅ Los datos se han actualizado correctamente.");
+    modal.classList.add("hidden");
+  };
+
+  filtro.addEventListener("input", e => {
+    const filtroTexto = e.target.value.toLowerCase();
+    Array.from(bodyTabla.rows).forEach(row => {
+      const nombre = row.cells[0].textContent.toLowerCase();
+      row.style.display = nombre.includes(filtroTexto) ? "" : "none";
+    });
+  });
+
+  // Mostrar detalles completos
+  bodyTabla.addEventListener("click", e => {
+    if (e.target.classList.contains("btnEditar")) {
+      modal.classList.remove("hidden");
+      tituloModal.textContent = "Editar Actividad";
+      btnGuardar.textContent = "Actualizar";
+    } else if (e.target.classList.contains("btnVer")) {
+      modalDetalles.classList.remove("hidden");
+      const row = e.target.closest("tr");
+
+      // Datos de ejemplo (en un proyecto real, estos vendrían del backend)
+      const detalles = {
+        nombre: row.cells[0].textContent,
+        encargado: row.cells[1].textContent,
+        descripcion: "Actividad de apoyo logístico en el evento de bienvenida de nuevos estudiantes.",
+        ubicacion: "Auditorio Principal - UTP CRPO",
+        vehiculo: "No requerido",
+        fecha: "2025-10-25 - 08:00 a.m.",
+        horas: row.cells[3].textContent + " horas",
+        impacto: "Promueve la integración y el sentido de pertenencia estudiantil.",
+        contribucion: "ODS 4 - Educación de calidad",
+        perfil: "Estudiantes con habilidades de organización y comunicación.",
+        cupos: row.cells[4].textContent,
+        anuncio: "Llevar camisa blanca y jeans azul el día del evento.",
+      };
+
+      const contenido = `
+        <p><strong>Nombre:</strong> ${detalles.nombre}</p>
+        <p><strong>Descripción:</strong> ${detalles.descripcion}</p>
+        <p><strong>Ubicación:</strong> ${detalles.ubicacion}</p>
+        <p><strong>Disponibilidad de Vehículo:</strong> ${detalles.vehiculo}</p>
+        <p><strong>Fecha y Hora:</strong> ${detalles.fecha}</p>
+        <p><strong>Horas Otorgadas:</strong> ${detalles.horas}</p>
+        <p><strong>Impacto:</strong> ${detalles.impacto}</p>
+        <p><strong>Contribución al Desarrollo Sostenible:</strong> ${detalles.contribucion}</p>
+        <p><strong>Perfil del Estudiante:</strong> ${detalles.perfil}</p>
+        <p><strong>Cupos Disponibles:</strong> ${detalles.cupos}</p>
+        <p><strong>Anuncio Importante:</strong> ${detalles.anuncio}</p>
+        <p><strong>Encargado:</strong> ${detalles.encargado}</p>
+      `;
+
+      document.getElementById("contenidoDetalles").innerHTML = contenido;
+    }
+  });
+
+  document.getElementById("cerrarDetalles").onclick = () => modalDetalles.classList.add("hidden");
+</script>
+
 </body>
 </html>

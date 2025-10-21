@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WestTech Social - Catálogo de Actividades</title>
+  <title>WestTech Social - Actividades</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans">
@@ -17,10 +17,21 @@
   <main class="max-w-7xl mx-auto py-10 px-6">
     <h2 class="text-2xl font-semibold text-blue-900 mb-6 text-center">Catálogo de Actividades Disponibles</h2>
 
+    <!-- 🔍 Filtro -->
+    <div class="flex justify-center mb-8">
+      <input 
+        id="filtroActividad" 
+        type="text" 
+        placeholder="Buscar actividad por nombre..." 
+        class="w-full sm:w-1/2 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-700 focus:outline-none"
+        oninput="filtrarActividades()"
+      />
+    </div>
+
     <!-- Grid de Cards -->
     <div id="catalogo" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Ejemplo de actividad -->
-      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition card" data-cupos="5">
+      <!-- Ejemplo 1 -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition card" data-nombre="Apoyo a la Feria Científica UTP" data-cupos="5">
         <img src="https://picsum.photos/400/200" alt="Actividad 1" class="w-full h-48 object-cover">
         <div class="p-5">
           <h3 class="text-lg font-bold text-blue-900">Apoyo a la Feria Científica UTP</h3>
@@ -30,13 +41,24 @@
         </div>
       </div>
 
-      <!-- Segunda actividad -->
-      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition card" data-cupos="2">
+      <!-- Ejemplo 2 -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition card" data-nombre="Limpieza de Playa Veracruz" data-cupos="2">
         <img src="https://picsum.photos/400/201" alt="Actividad 2" class="w-full h-48 object-cover">
         <div class="p-5">
           <h3 class="text-lg font-bold text-blue-900">Limpieza de Playa Veracruz</h3>
           <p class="text-sm text-gray-600 mt-2">📅 22 Oct 2025 • ⏰ 7:30 a.m. • ⏱️ 30 horas</p>
           <p class="mt-2 text-sm font-medium text-green-700 cupos">Cupos disponibles: <span class="font-bold">2</span></p>
+          <button onclick="abrirModal(this)" class="mt-4 bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition w-full">Ver detalles</button>
+        </div>
+      </div>
+
+      <!-- Ejemplo 3 -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition card" data-nombre="Reforestación en Panamá Oeste" data-cupos="3">
+        <img src="https://picsum.photos/400/202" alt="Actividad 3" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-blue-900">Reforestación en Panamá Oeste</h3>
+          <p class="text-sm text-gray-600 mt-2">📅 28 Oct 2025 • ⏰ 9:00 a.m. • ⏱️ 25 horas</p>
+          <p class="mt-2 text-sm font-medium text-green-700 cupos">Cupos disponibles: <span class="font-bold">3</span></p>
           <button onclick="abrirModal(this)" class="mt-4 bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition w-full">Ver detalles</button>
         </div>
       </div>
@@ -77,9 +99,9 @@
           <input type="text" placeholder="Cédula" required class="p-2 border rounded-md">
           <input type="email" placeholder="Correo institucional" required class="p-2 border rounded-md">
           <input type="text" placeholder="Tipo de sangre" class="p-2 border rounded-md">
-          
+
           <select required class="p-2 border rounded-md">
-            <option value="">Facultad perteneciente</option>
+            <option value="">Facultad</option>
             <option>Ingeniería Civil</option>
             <option>Ingeniería Eléctrica</option>
             <option>Ingeniería Industrial</option>
@@ -92,7 +114,7 @@
           <input type="file" accept="image/*" class="p-2 border rounded-md col-span-1 md:col-span-2">
 
           <button type="submit" class="bg-blue-700 text-white py-2 rounded-md hover:bg-blue-800 transition col-span-1 md:col-span-2">
-            Enviar solicitud
+            Registrarse en actividad
           </button>
         </form>
       </div>
@@ -143,9 +165,18 @@
           setTimeout(() => actividadActual.remove(), 1500);
         }
 
-        alert("Registro exitoso ✅");
+        alert("Registrado correctamente ✅");
         cerrarModal();
       }
+    }
+
+    // 🔍 Filtro de búsqueda
+    function filtrarActividades() {
+      const filtro = document.getElementById('filtroActividad').value.toLowerCase();
+      document.querySelectorAll('.card').forEach(card => {
+        const nombre = card.getAttribute('data-nombre').toLowerCase();
+        card.style.display = nombre.includes(filtro) ? 'block' : 'none';
+      });
     }
 
     // Cerrar modal al hacer clic fuera
