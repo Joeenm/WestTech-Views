@@ -169,91 +169,144 @@
 </div>
 
 <script>
-  const modal = document.getElementById("modalActividad");
-  const modalDetalles = document.getElementById("modalDetalles");
-  const form = document.getElementById("formActividad");
-  const tituloModal = document.getElementById("tituloModal");
-  const btnGuardar = document.getElementById("btnGuardar");
-  const filtro = document.getElementById("filtro");
-  const bodyTabla = document.getElementById("bodyTabla");
+// ==== MODALES ====
+const modal = document.getElementById("modalActividad");
+const modalDetalles = document.getElementById("modalDetalles");
+const form = document.getElementById("formActividad");
+const tituloModal = document.getElementById("tituloModal");
+const btnGuardar = document.getElementById("btnGuardar");
+const filtro = document.getElementById("filtro");
+const bodyTabla = document.getElementById("bodyTabla");
 
-  document.getElementById("btnNueva").onclick = () => {
-    modal.classList.remove("hidden");
-    tituloModal.textContent = "Nueva Actividad";
-    btnGuardar.textContent = "Registrar";
-    form.reset();
+// ==== CONTENEDOR DE ALERTAS ====
+const alertContainer = document.createElement("div");
+alertContainer.className = "fixed top-5 right-5 z-[100] space-y-3";
+document.body.appendChild(alertContainer);
+
+// ==== FUNCIÓN DE ALERTA PERSONALIZADA ====
+function mostrarAlerta(mensaje, tipo = "info", duracion = 4000) {
+  const colores = {
+    success: "bg-green-600 border-green-700",
+    warning: "bg-yellow-500 border-yellow-600",
+    error: "bg-red-600 border-red-700",
+    info: "bg-blue-600 border-blue-700",
   };
 
-  document.getElementById("btnCancelar").onclick = () => modal.classList.add("hidden");
+  const alerta = document.createElement("div");
+  alerta.className = `
+    flex items-center justify-between text-white px-4 py-3 rounded-lg shadow-lg border 
+    animate-fadeIn ${colores[tipo] || colores.info}
+  `;
+  alerta.innerHTML = `
+    <span class="font-medium">${mensaje}</span>
+    <button class="ml-4 text-xl font-bold leading-none hover:opacity-75">&times;</button>
+  `;
 
-  form.onsubmit = (e) => {
-    e.preventDefault();
-    const camposObligatorios = ["nombre", "encargado", "descripcion", "ubicacion", "fecha", "horas", "cupos"];
-    const incompletos = camposObligatorios.some(id => !document.getElementById(id).value.trim());
-    if (incompletos) {
-      alert("⚠️ Termine de completar los datos para registrar la actividad.");
-      return;
-    }
-    alert(btnGuardar.textContent === "Registrar"
+  alertContainer.appendChild(alerta);
+
+  // Cerrar manualmente
+  alerta.querySelector("button").onclick = () => alerta.remove();
+
+  // Cerrar automáticamente
+  setTimeout(() => {
+    alerta.classList.add("animate-fadeOut");
+    setTimeout(() => alerta.remove(), 500);
+  }, duracion);
+}
+
+// ==== ANIMACIONES TAILWIND ====
+const style = document.createElement("style");
+style.textContent = `
+@keyframes fadeIn { from {opacity: 0; transform: translateY(-5px);} to {opacity: 1; transform: translateY(0);} }
+@keyframes fadeOut { from {opacity: 1; transform: translateY(0);} to {opacity: 0; transform: translateY(-5px);} }
+.animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
+.animate-fadeOut { animation: fadeOut 0.3s ease-in forwards; }
+`;
+document.head.appendChild(style);
+
+// ==== EVENTOS ====
+document.getElementById("btnNueva").onclick = () => {
+  modal.classList.remove("hidden");
+  tituloModal.textContent = "Nueva Actividad";
+  btnGuardar.textContent = "Registrar";
+  form.reset();
+};
+
+document.getElementById("btnCancelar").onclick = () => modal.classList.add("hidden");
+
+// ==== VALIDACIÓN Y ENVÍO ====
+form.onsubmit = (e) => {
+  e.preventDefault();
+  const camposObligatorios = ["nombre", "encargado", "descripcion", "ubicacion", "fecha", "horas", "cupos"];
+  const incompletos = camposObligatorios.some(id => !document.getElementById(id).value.trim());
+
+  if (incompletos) {
+    mostrarAlerta("⚠️ Termine de completar los datos para registrar la actividad.", "warning");
+    return;
+  }
+
+  mostrarAlerta(
+    btnGuardar.textContent === "Registrar"
       ? "✅ Actividad registrada con éxito."
-      : "✅ Los datos se han actualizado correctamente.");
-    modal.classList.add("hidden");
-  };
+      : "✅ Los datos se han actualizado correctamente.",
+    "success"
+  );
 
-  filtro.addEventListener("input", e => {
-    const filtroTexto = e.target.value.toLowerCase();
-    Array.from(bodyTabla.rows).forEach(row => {
-      const nombre = row.cells[0].textContent.toLowerCase();
-      row.style.display = nombre.includes(filtroTexto) ? "" : "none";
-    });
+  modal.classList.add("hidden");
+};
+
+// ==== FILTRO ====
+filtro.addEventListener("input", e => {
+  const filtroTexto = e.target.value.toLowerCase();
+  Array.from(bodyTabla.rows).forEach(row => {
+    const nombre = row.cells[0].textContent.toLowerCase();
+    row.style.display = nombre.includes(filtroTexto) ? "" : "none";
   });
+});
 
-  // Mostrar detalles completos
-  bodyTabla.addEventListener("click", e => {
-    if (e.target.classList.contains("btnEditar")) {
-      modal.classList.remove("hidden");
-      tituloModal.textContent = "Editar Actividad";
-      btnGuardar.textContent = "Actualizar";
-    } else if (e.target.classList.contains("btnVer")) {
-      modalDetalles.classList.remove("hidden");
-      const row = e.target.closest("tr");
+// ==== VER DETALLES ====
+bodyTabla.addEventListener("click", e => {
+  if (e.target.classList.contains("btnEditar")) {
+    modal.classList.remove("hidden");
+    tituloModal.textContent = "Editar Actividad";
+    btnGuardar.textContent = "Actualizar";
+  } else if (e.target.classList.contains("btnVer")) {
+    modalDetalles.classList.remove("hidden");
+    const row = e.target.closest("tr");
 
-      // Datos de ejemplo (en un proyecto real, estos vendrían del backend)
-      const detalles = {
-        nombre: row.cells[0].textContent,
-        encargado: row.cells[1].textContent,
-        descripcion: "Actividad de apoyo logístico en el evento de bienvenida de nuevos estudiantes.",
-        ubicacion: "Auditorio Principal - UTP CRPO",
-        vehiculo: "No requerido",
-        fecha: "2025-10-25 - 08:00 a.m.",
-        horas: row.cells[3].textContent + " horas",
-        impacto: "Promueve la integración y el sentido de pertenencia estudiantil.",
-        contribucion: "ODS 4 - Educación de calidad",
-        perfil: "Estudiantes con habilidades de organización y comunicación.",
-        cupos: row.cells[4].textContent,
-        anuncio: "Llevar camisa blanca y jeans azul el día del evento.",
-      };
+    const detalles = {
+      nombre: row.cells[0].textContent,
+      encargado: row.cells[1].textContent,
+      descripcion: "Actividad de apoyo logístico en el evento de bienvenida de nuevos estudiantes.",
+      ubicacion: "Auditorio Principal - UTP CRPO",
+      vehiculo: "No requerido",
+      fecha: "2025-10-25 - 08:00 a.m.",
+      horas: row.cells[3].textContent + " horas",
+      impacto: "Promueve la integración y el sentido de pertenencia estudiantil.",
+      contribucion: "ODS 4 - Educación de calidad",
+      perfil: "Estudiantes con habilidades de organización y comunicación.",
+      cupos: row.cells[4].textContent,
+      anuncio: "Llevar camisa blanca y jeans azul el día del evento.",
+    };
 
-      const contenido = `
-        <p><strong>Nombre:</strong> ${detalles.nombre}</p>
-        <p><strong>Descripción:</strong> ${detalles.descripcion}</p>
-        <p><strong>Ubicación:</strong> ${detalles.ubicacion}</p>
-        <p><strong>Disponibilidad de Vehículo:</strong> ${detalles.vehiculo}</p>
-        <p><strong>Fecha y Hora:</strong> ${detalles.fecha}</p>
-        <p><strong>Horas Otorgadas:</strong> ${detalles.horas}</p>
-        <p><strong>Impacto:</strong> ${detalles.impacto}</p>
-        <p><strong>Contribución al Desarrollo Sostenible:</strong> ${detalles.contribucion}</p>
-        <p><strong>Perfil del Estudiante:</strong> ${detalles.perfil}</p>
-        <p><strong>Cupos Disponibles:</strong> ${detalles.cupos}</p>
-        <p><strong>Anuncio Importante:</strong> ${detalles.anuncio}</p>
-        <p><strong>Encargado:</strong> ${detalles.encargado}</p>
-      `;
+    document.getElementById("contenidoDetalles").innerHTML = `
+      <p><strong>Nombre:</strong> ${detalles.nombre}</p>
+      <p><strong>Descripción:</strong> ${detalles.descripcion}</p>
+      <p><strong>Ubicación:</strong> ${detalles.ubicacion}</p>
+      <p><strong>Disponibilidad de Vehículo:</strong> ${detalles.vehiculo}</p>
+      <p><strong>Fecha y Hora:</strong> ${detalles.fecha}</p>
+      <p><strong>Horas Otorgadas:</strong> ${detalles.horas}</p>
+      <p><strong>Impacto:</strong> ${detalles.impacto}</p>
+      <p><strong>Contribución al Desarrollo Sostenible:</strong> ${detalles.contribucion}</p>
+      <p><strong>Perfil del Estudiante:</strong> ${detalles.perfil}</p>
+      <p><strong>Cupos Disponibles:</strong> ${detalles.cupos}</p>
+      <p><strong>Anuncio Importante:</strong> ${detalles.anuncio}</p>
+      <p><strong>Encargado:</strong> ${detalles.encargado}</p>
+    `;
+  }
+});
 
-      document.getElementById("contenidoDetalles").innerHTML = contenido;
-    }
-  });
-
-  document.getElementById("cerrarDetalles").onclick = () => modalDetalles.classList.add("hidden");
+document.getElementById("cerrarDetalles").onclick = () => modalDetalles.classList.add("hidden");
 </script>
 
 </body>
